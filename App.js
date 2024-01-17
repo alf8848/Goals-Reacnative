@@ -1,16 +1,43 @@
+import { useState } from 'react';
 import { StyleSheet, View, TextInput, Button, Text } from 'react-native';
 
 export default function App() {
+
+  //declaramos el hook de estado de componente "newGoal"
+  const [newGoal, setNewGoal] = useState("");
+  const [myGoals, setMyGoals] = useState([]);
+
+  function textChangeHandler(enteredText) {
+    setNewGoal(enteredText);
+    console.log(newGoal);
+  }
+
+  function addGoalHandler() {
+    setMyGoals(myCurrentGoals => [...myCurrentGoals, newGoal]);
+    console.log(myGoals);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.textInput} placeholder='Input your Goal: ' />
-        <Button title='Add Goal' />
+        <TextInput
+          onChangeText={textChangeHandler}
+          style={styles.textInput}
+          placeholder='Input your Goal!!' />
+        <Button
+          title='Add Goal'
+          onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-        <Text>Your list of goals...</Text>
+        {myGoals.map((goal, i) => {
+          return (
+            <View key={goal}>
+              <Text>{goal}</Text>
+            </View>
+          )
+        })}
       </View>
-    </View>
+    </View >
   );
 }
 
