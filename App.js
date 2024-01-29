@@ -1,57 +1,44 @@
 import { View, TextInput, Button, Text, StyleSheet, FlatList } from 'react-native';
 import { useState } from 'react';
+import GoalInput from './components/GoalInput';
+import GoalItem from './components/GoalItem';
 
 
 export default function App() {
-
   // declaramos el hook de estado de componente "newGoal"
-  const [newGoal, setNewGoal] = useState("");
   const [myGoals, setMyGoals] = useState([]);
 
-  function textChangeHandler(enteredText) {
-    setNewGoal(enteredText);
-  }
-
-  function addGoalHandler() {
+  function addGoalHandler(newGoalText) {
     setMyGoals(myCurrentGoals => [...myCurrentGoals,
     {
       id: Date.now(),
-      text: newGoal,
+      text: newGoalText,
     }]);
-    setNewGoal("");
+  }
+  function onDeleteGoalHandler(id) {
+    setMyGoals((myCurrentGoals) => {
+      return myCurrentGoals.filter((goal) => goal.id != id)
+    })
 
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          onChangeText={textChangeHandler}
-          style={styles.textInput}
-          value={newGoal}
-          placeholder='Input your Goal!!'
-        />
-        <Button
-          title='Add Goal'
-          onPress={addGoalHandler}
-        />
-      </View>
-      <View style={styles.goalsContainer}>
 
+      <GoalInput onNewGoal={addGoalHandler} />
+
+      <View style={styles.goalsContainer}>
         <FlatList
           data={myGoals}
           renderItem={(dataItem) => (
-            <View style={styles.goalItem} key={dataItem.item.id}>
-              <Text style={styles.goalText}>{dataItem.item.text}</Text>
-            </View>
+            <GoalItem
+              key={dataItem.item.id} ç
+              goal={dataItem.item}
+              onDeleteGoal={onDeleteGoalHandler}
+            />
           )
           }
         />
-
-
-
-
-
       </View>
     </View>
   );
@@ -63,15 +50,6 @@ const styles = new StyleSheet.create({
     paddingTop: 70,
     paddingHorizontal: 15
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#CCCCCC",
-    alignItems: 'center'
-  },
   textInput: {
     borderColor: "#CCCCCC",
     borderWidth: 1,
@@ -80,16 +58,6 @@ const styles = new StyleSheet.create({
   },
   goalsContainer: {
     flex: 5,
-  },
-  goalItem: {
-    padding: 20,
-    backgroundColor: "#092FE0",
-    marginBottom: 10,
-    borderRadius: 12,
-  },
-  goalText: {
-    color: "white"
   }
-
-
 })
+
