@@ -4,8 +4,11 @@ export default function GoalItem({ goal, onDeleteGoal }) {
 
     return (
         <Pressable
+            android_ripple={{ color: "#210644" }}
+            style={({ pressed }) => pressed && styles.pressedItem}
             onPress={() => {
                 onDeleteGoal(goal.id)
+
             }}
         >
             <View style={styles.goalItem} >
@@ -24,6 +27,9 @@ const styles = new StyleSheet.create({
     },
     goalText: {
         color: "white"
+    },
+    pressedItem: {
+        opacity: 0.5
     }
 
 
