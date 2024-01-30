@@ -23,6 +23,7 @@ export default function App() {
 
   }
 
+
   return (
     <View style={styles.container}>
 
@@ -33,6 +34,7 @@ export default function App() {
 
       <GoalInput
         onNewGoal={addGoalHandler}
+        onCancel={() => setModalVisible(false)}
         visible={modalVisible}
       />
 
@@ -58,12 +60,6 @@ const styles = new StyleSheet.create({
     flex: 1,
     paddingTop: 70,
     paddingHorizontal: 15
-  },
-  textInput: {
-    borderColor: "#CCCCCC",
-    borderWidth: 1,
-    width: "70%",
-    padding: 10
   },
   goalsContainer: {
     flex: 5,
