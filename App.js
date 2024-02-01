@@ -1,76 +1,70 @@
-import { View, TextInput, Button, Text, StyleSheet, FlatList } from 'react-native';
-import { useState } from 'react';
-import GoalInput from './components/GoalInput';
-import GoalItem from './components/GoalItem';
-import { StatusBar } from 'expo-status-bar';
-
+import React, { useState } from 'react';
+import { StyleSheet, View, TextInput, Button, Text } from 'react-native';
 
 export default function App() {
-  // declaramos el hook de estado de componente "newGoal"
+
+  // Declaramos el hook de estado de componente "newGoal"
+  const [newGoal, setNewGoal] = useState("");
   const [myGoals, setMyGoals] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
 
-  function addGoalHandler(newGoalText) {
-    setMyGoals(myCurrentGoals => [...myCurrentGoals,
-    {
-      id: Date.now(),
-      text: newGoalText,
-    }]);
-  }
-  function onDeleteGoalHandler(id) {
-    setMyGoals((myCurrentGoals) => {
-      return myCurrentGoals.filter((goal) => goal.id != id)
-    })
-
+  function textChangeHandler(enteredText) {
+    setNewGoal(enteredText);
+    console.log(enteredText); // Cambiado de "newGoal" a "enteredText"
   }
 
+  function addGoalHandler() {
+    setMyGoals(myCurrentGoals => [...myCurrentGoals, newGoal]);
+    setNewGoal(""); // Limpiar el campo después de agregar un objetivo
+    console.log(myGoals);
+  }
 
   return (
-
-    <>
-      <StatusBar style='light' />
-      <View style={styles.container}>
-
-
-        <Button
-          title='Add New Goal'
-          onPress={() => setModalVisible(true)}
-          color="#b496dc"
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
+        {/* Agregamos la propiedad "value" al TextInput y pasamos el valor de "newGoal" */}
+        <TextInput
+          style={styles.textInput}
+          placeholder='Input your Goal: '
+          onChangeText={textChangeHandler}
+          value={newGoal}
         />
-
-        <GoalInput
-          onNewGoal={addGoalHandler}
-          onCancel={() => setModalVisible(false)}
-          visible={modalVisible}
-        />
-
-        <View style={styles.goalsContainer}>
-          <FlatList
-            data={myGoals}
-            renderItem={(dataItem) => (
-              <GoalItem
-                key={dataItem.item.id} ç
-                goal={dataItem.item}
-                onDeleteGoal={onDeleteGoalHandler}
-              />
-            )
-            }
-          />
-        </View>
+        <Button title='Add Goal' onPress={addGoalHandler} />
       </View>
-    </>
+      <View style={styles.goalsContainer}>
+        <Text>Your list of goals...</Text>
+        {myGoals.map((goal, i) => {
+          return (
+            <View key={i}>
+              <Text>{goal}</Text>
+            </View>
+          );
+        })}
+      </View>
+    </View>
   );
 }
 
-const styles = new StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 70,
-    paddingHorizontal: 15,
-    /*backgroundColor: "#1e085a"*/
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '80%',
+    marginBottom: 10,
+  },
+  textInput: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    width: '70%',
+    marginBottom: 10,
   },
   goalsContainer: {
-    flex: 5,
-  }
-})
-
+    width: '80%',
+    alignItems: 'center',
+  },
+});
