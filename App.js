@@ -4,43 +4,41 @@ import GoalInput from './components/GoalInput';
 import GoalItem from './components/GoalItem';
 import { StatusBar } from 'expo-status-bar';
 
+// ... (other imports)
 
 export default function App() {
-  // declaramos el hook de estado de componente "newGoal"
   const [myGoals, setMyGoals] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  function addGoalHandler(newGoalText) {
-    setMyGoals(myCurrentGoals => [{
-      id: Date.now(),
-      text: newGoalText,
-    }, ...myCurrentGoals
+  function handleAddGoal(newGoalText) {
+    setMyGoals(myCurrentGoals => [
+      {
+        id: Date.now(),
+        text: newGoalText,
+      },
+      ...myCurrentGoals
     ]);
     setModalVisible(false);
   }
-  function onDeleteGoalHandler(id) {
-    setMyGoals((myCurrentGoals) => {
-      return myCurrentGoals.filter((goal) => goal.id != id)
-    })
 
+  function handleDeleteGoal(id) {
+    setMyGoals(myCurrentGoals =>
+      myCurrentGoals.filter(goal => goal.id !== id)
+    );
   }
 
-
   return (
-
     <>
-      <StatusBar style='light' />
+      <StatusBar style="light" />
       <View style={styles.container}>
-
-
         <Button
-          title='Add New Goal'
+          title="Add New Goal"
           onPress={() => setModalVisible(true)}
           color="#b496dc"
         />
 
         <GoalInput
-          onNewGoal={addGoalHandler}
+          onNewGoal={handleAddGoal}
           onCancel={() => setModalVisible(false)}
           visible={modalVisible}
         />
@@ -50,12 +48,11 @@ export default function App() {
             data={myGoals}
             renderItem={(dataItem) => (
               <GoalItem
-                key={dataItem.item.id} ç
+                key={dataItem.item.id}
                 goal={dataItem.item}
-                onDeleteGoal={onDeleteGoalHandler}
+                onDeleteGoal={handleDeleteGoal}
               />
-            )
-            }
+            )}
           />
         </View>
       </View>
@@ -63,6 +60,7 @@ export default function App() {
   );
 }
 
+// ... (other styles)
 const styles = new StyleSheet.create({
   container: {
     flex: 1,
